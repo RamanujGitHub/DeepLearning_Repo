@@ -1,0 +1,88 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red128\green0\blue0;\red0\green128\blue0;\red0\green0\blue255;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c50196\c0\c0;\csgenericrgb\c0\c50196\c0;\csgenericrgb\c0\c0\c100000;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs24 \cf2 SELECT
+\f1\b0 \cf0  tl.league_season ,tl.league_name , tl.league_gender ,tl.is_international\
+,tm.match_name, tg.ground_name , tm.home_team_id , tm.away_team_id,tm.match_year\
+,tid.total_overs,tos.over_num ,tos.runs_scored ,tos.total_wickets , \
+tos.fours_scored ,tos.sixes_scored , tos.total_wides, tos.total_no_balls , tos.total_byes , tos.total_leg_byes\
+,tid.total_scores\
+
+\f0\b \cf2 FROM
+\f1\b0 \cf0  tb_over_stats tos \
+
+\f0\b \cf2 left
+\f1\b0 \cf0  
+\f0\b \cf2 outer
+\f1\b0 \cf0  
+\f0\b \cf2 join
+\f1\b0 \cf0  tb_inning_details tid 
+\f0\b \cf2 on
+\f1\b0 \cf0  tos.match_id = tid.match_id \
+
+\f0\b \cf2 left
+\f1\b0 \cf0  
+\f0\b \cf2 outer
+\f1\b0 \cf0  
+\f0\b \cf2 join
+\f1\b0 \cf0  tb_match tm 
+\f0\b \cf2 on
+\f1\b0 \cf0  tm.match_id = tid.match_id \
+
+\f0\b \cf2 left
+\f1\b0 \cf0  
+\f0\b \cf2 outer
+\f1\b0 \cf0  
+\f0\b \cf2 join
+\f1\b0 \cf0  tb_league tl 
+\f0\b \cf2 on
+\f1\b0 \cf0  tl.league_id = tm.league_id \
+
+\f0\b \cf2 left
+\f1\b0 \cf0  
+\f0\b \cf2 outer
+\f1\b0 \cf0  
+\f0\b \cf2 join
+\f1\b0 \cf0  tb_ground tg 
+\f0\b \cf2 on
+\f1\b0 \cf0  tg.ground_id = tm.ground_id \
+
+\f0\b \cf2 left
+\f1\b0 \cf0  
+\f0\b \cf2 outer
+\f1\b0 \cf0  
+\f0\b \cf2 join
+\f1\b0 \cf0  tb_url tu 
+\f0\b \cf2 on
+\f1\b0 \cf0  tu.url_id = tm.url_id \
+
+\f0\b \cf2 where
+\f1\b0 \cf0  tl.league_format = \cf3 'T20'\cf0 \
+
+\f0\b \cf2 and
+\f1\b0 \cf0  tm.is_data_mismatch 
+\f0\b \cf2 is
+\f1\b0 \cf0  
+\f0\b \cf2 false
+\f1\b0 \cf0  \
+
+\f0\b \cf2 and
+\f1\b0 \cf0  tm.match_id <\cf4 1000\cf0 \
+
+\f0\b \cf2 and
+\f1\b0 \cf0  tid.inning_num  = \cf4 1\cf0 \
+
+\f0\b \cf2 and
+\f1\b0 \cf0  tu.scraped_timestamp 
+\f0\b \cf2 is
+\f1\b0 \cf0  
+\f0\b \cf2 not
+\f1\b0 \cf0  
+\f0\b \cf2 null}
