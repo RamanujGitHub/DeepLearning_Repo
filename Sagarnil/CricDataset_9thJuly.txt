@@ -1,0 +1,31 @@
+SELECT tm.match_id,tl.league_season ,tl.league_name , tl.league_gender ,tl.is_international
+,tm.match_name, tg.ground_name , tm.home_team_id , tm.away_team_id,tm.match_year
+,tid.total_overs,tos.over_num ,tos.runs_scored ,tos.total_wickets , 
+tos.fours_scored ,tos.sixes_scored , tos.total_wides, tos.total_no_balls , tos.total_byes , tos.total_leg_byes
+,tid.total_scores
+FROM tb_over_stats tos 
+left outer join tb_inning_details tid on tos.match_id = tid.match_id 
+left outer join tb_match tm on tm.match_id = tid.match_id 
+left outer join tb_league tl on tl.league_id = tm.league_id 
+left outer join tb_ground tg on tg.ground_id = tm.ground_id 
+left outer join tb_url tu on tu.url_id = tm.url_id 
+where tl.league_format = 'T20'
+and tid.inning_num  = 1
+and tos.inning_num = 1
+and tu.scraped_timestamp is not null
+and tos.over_num <=10
+and tm.match_id in
+(select tos.match_id 
+from tb_over_stats tos , 
+tb_inning_details tid , 
+tb_url tu , 
+tb_match tm 
+where tos.match_id = tid.match_id and 
+tos.inning_num = tid.inning_num and 
+tu.url_id =tm.url_id and 
+tos.match_id = tm.match_id 
+and tu.scraped_timestamp is not null
+group by tos.match_id , tos.inning_num , tid.total_scores , 
+tid.total_wickets, tu.match_url, tm.is_data_mismatch,tu.scraped_timestamp 
+having sum(tos.runs_scored) - tid.total_scores between -10 and 10
+)
